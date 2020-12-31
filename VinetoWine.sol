@@ -313,7 +313,7 @@ contract VineToWine {
         emit bottledEvent(_bottle_id, p);
     }
     
-    // this function returns a bottles history
+    // this function stores any change in the ownership of the bottle after the packer has bottled the wine
     function changeOwner(string memory _bottle_id) public {
         require(addressRoleMapping[msg.sender].entityrole == role.farmer ||
                 addressRoleMapping[msg.sender].entityrole == role.producer ||
