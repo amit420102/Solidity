@@ -59,4 +59,4 @@ This function returns the entire journey of the bottle by calling function getBo
 Smart contract Token.sol will create the token to be used in the eco system. For simplicity buying and selling of the token is kept out of the scope but smart contract Token.sol will create the token to be used by the entities.
 Each of the entitie addresses will then manually approve the smart contract address for VinetoWine.sol to make transfer to specific address while registering themselves on the platform.
 This ensures that all the entities have stake in the system and can be trusted. In real world the stake can be higher to ensure there is heavy monetary penalty for faul play. 
-Also, any saving in the terms of having the streamline system in place will be distributed to the. entities in terms of dividends based on stake done to the eco system.
+Also, any saving in the terms of having the streamlined system in place will be distributed to the entities in terms of dividends based on stake put in the eco system.
