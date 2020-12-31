@@ -54,3 +54,9 @@ Whenever there is any change in owner after the bottle is packed by the packer t
 
 ## Get bottle history:
 This function returns the entire journey of the bottle by calling function getBottleHistory() and takes bottle id as an input. This will return entire journey from teh vineyard details where the grapes was grown to the winery where the wine was produced and all the date when each of the wine processing step was conducted. This will also show when the packed received the wine barell and bottle id. Also, any change in ownership of the bottle after the packer packed it can be traced using this function.
+
+# Tokenomics of the eco system:
+Smart contract Token.sol will create the token to be used in the eco system. For simplicity buying and selling of the token is kept out of the scope but smart contract Token.sol will create the token to be used by the entities.
+Each of the entitie addresses will then manually approve the smart contract address for VinetoWine.sol to make transfer to specific address while registering themselves on the platform.
+This ensures that all the entities have stake in the system and can be trusted. In real world the stake can be higher to ensure there is heavy monetary penalty for faul play. 
+Also, any saving in the terms of having the streamline system in place will be distributed to the. entities in terms of dividends based on stake done to the eco system.
