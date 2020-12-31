@@ -7,13 +7,13 @@ Any farmer who owns the Vineyard and supplies vines to winery for production can
 ## Producers:
 These are any wineries who produce wine and interacts with Vineyards can register for traceability program.
 ## Packer:
-These are bottlers who recieve the barrell of wine from the producer and bottles and packages the bottle for marketing.
+These are bottlers who recieve the barrell of wine from the producer and bottles them for marketing.
 ## Distributor:
-These are the entity who engages in distribunting the bottles to the retailers.
+These are the entity who engages in distributing the bottles to the retailers.
 ## Retailer:
 Retailers are the end point of sale and deals with direct customers.
 ## Consumer:
-These are consumers of the wine who directly buy form the retaielrs.
+These are consumers of the wine who directly buy from the retailers.
 
 # Process invovled in Traceability smart contract:
 ## Registering the Vineyard:
