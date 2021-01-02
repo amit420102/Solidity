@@ -1,5 +1,14 @@
 # VineToWine: 
 This project is about creating a traceability of wine being produced by a company and storing it on etherum blockchain. This smart contract will create a traceability for a wine bottle for the Vineyard from where the grapes came to the winery where the grape was processed. All the processes that were conducted while creating the wine to the packing and distribution of the wine bottle will be traced. This smart contract will also track change in ownership of the bottle.
+
+# There are 3 modules:
+## Token.sol
+This module contains details to generate a fixed amount of token fro the entire eco system.
+## ICO.sol
+This module contains an interface for entities in the eco syatem to buy the tokens, where 1 eth will buy the user 100 tokens.
+## VineToWine.sol
+This is the main contract where all the traceability is handled for the wine. More details about the entire contract can be found below.
+
 # Entities invovled in the eco system:
 There are large number of entities invovled in a wine production and delivery supply chain. Any entity which wants to participate in the eco system will need to stake a fixed amount of VineToWine token in roder to register on the platform. This activity calls function registerEntity() in the backend. This function needs entity name and its role in the eco system. Below are various roles in the eco system.
 ## Farmers:
@@ -56,7 +65,5 @@ Whenever there is any change in owner after the bottle is packed by the packer t
 This function returns the entire journey of the bottle by calling function getBottleHistory() and takes bottle id as an input. This will return entire journey from teh vineyard details where the grapes was grown to the winery where the wine was produced and all the date when each of the wine processing step was conducted. This will also show when the packed received the wine barell and bottle id. Also, any change in ownership of the bottle after the packer packed it can be traced using this function.
 
 # Tokenomics of the eco system:
-Smart contract Token.sol will create the token to be used in the eco system. For simplicity buying and selling of the token is kept out of the scope but smart contract Token.sol will create the token to be used by the entities.
-Each of the entitie addresses will then manually approve the smart contract address for VinetoWine.sol to make transfer to specific address while registering themselves on the platform.
-This ensures that all the entities have stake in the system and can be trusted. In real world the stake can be higher to ensure there is heavy monetary penalty for faul play. 
-Also, any saving in the terms of having the streamlined system in place will be distributed to the entities in terms of dividends based on stake put in the eco system.
+Smart contract Token.sol will create a fixed amount of token to be used in the eco system. Any entity invovled in the eco system can use ICO.sol to by the tokens needed in teh eco system. For simplicity, i have kept it as 1 ETH equals to 100 V2W tokens. Once the entity has bought the tokens they can execute the VineToWine.sol contract to start traceability of the entire wine supply chain management.
+Staking by the entities ensure that all the entities have stake in the system and can create trust in a trustless environment. In real world the stake can be higher to ensure there is heavy monetary penalty for any faul play. 
