@@ -3,6 +3,15 @@ pragma solidity 0.6.12;
 pragma experimental ABIEncoderV2;
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/IERC20.sol";
 
+// address details for testing, each will have 100 tokens transfered (100000000000000000000)
+// farmer - 0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2
+// producer - 0x4B20993Bc481177ec7E8f571ceCaE8A9e22C02db
+// packer - 0x78731D3Ca6b7E34aC0F824c42a7cC18A495cabaB
+// distributor - 0x617F2E2fD72FD9D5503197092aC168c91465E7f2
+// retailer - 0x17F6AD8Ef982297579C203069C1DbfFE4348c372
+// consumer - 0x5c6B0f7Bf3E7ce046039Bd8FABdfD3f9F5021678
+// contract deployer - 0x03C6FcED478cBbC9a4FAB34eF9f40767739D1Ff7
+
 contract VineToWine {
     
     //  ************   entity registration block starts ***************************************
@@ -90,8 +99,8 @@ contract VineToWine {
     event produreDetails(producer []);
     event barrellDetails(address producer_address, string barrell_batch_number);
     event barrellReceived(address packeraddress, string barrell_batch_number);
-    event bottledEvent(string bottleId, packer packedbottle);
-    event bottle_history(bottleHistory bottle_history_details);
+    event bottledEvent(address packeraddress, string bottleId, packer packedbottle);
+    event bottle_history(address user, bottleHistory bottle_history_details);
 
     //*******************************************************************
     
@@ -99,15 +108,35 @@ contract VineToWine {
     
     IERC20 token;
     address contract_owner;
-    uint256 deposit_balance;
+    address ICO_owner;
+    uint256 staking_amount;
     
-    constructor(address _token_address, uint256 _deposit_balance) public {
+    constructor(address _token_address, uint256 _staking_amount, address _ICO_owner) public {
         token = IERC20(_token_address);
         contract_owner = msg.sender;
-        deposit_balance = _deposit_balance;
+        staking_amount = _staking_amount;
+        ICO_owner = _ICO_owner;
     }
     
     // end of block to store token address while creating contract
+    
+    //******* modifier block starts ****************************************************
+    modifier checkFarmer() {
+       require(addressRoleMapping[msg.sender].entityrole == role.farmer, "the entity is not a farmer");
+       _;
+    }
+    
+    modifier checkProducer() {
+        require(addressRoleMapping[msg.sender].entityrole == role.producer, "the entity is not a producer");
+        _;
+    }
+    
+    modifier checkPacker() {
+        require(addressRoleMapping[msg.sender].entityrole == role.packer, "the entity is not a packer");
+        _;
+    }
+    
+    //******* modifier block ends *******************************************************
     
     // below function registers an entity in the ecosystem as one of the roles
     function registerEntity(string memory _name, role _role) public payable {
@@ -117,9 +146,10 @@ contract VineToWine {
                 role.distributor == _role || role.retailer == _role, "the role provided is invalid");
         
         // transfer 50 tokens to contract address while registering any entity
+        // pass the staked amount to contract address
         if (role.farmer == _role || role.producer == _role || role.packer == _role ||
                 role.distributor == _role || role.retailer == _role) {
-                    token.transferFrom(msg.sender, contract_owner, deposit_balance * 10 ** 18);
+                    token.transferFrom(msg.sender, ICO_owner, staking_amount * 10 ** 18);
                 }
         
         entity memory e = entity(_name, _role);
@@ -149,9 +179,8 @@ contract VineToWine {
     }
     
     //below function is to register the vineyard to a farmer
-    function registerVineryard(string memory _locationid, string memory _vinevariety) public {
+    function registerVineryard(string memory _locationid, string memory _vinevariety) public checkFarmer(){
         
-        require(addressRoleMapping[msg.sender].entityrole == role.farmer, "the entity is not a farmer");
         vineyard memory v = vineyard(msg.sender, _locationid, _vinevariety, 0, " ", false);
         vineyardmap[msg.sender].push(v);
         emit vineyardRegistered(msg.sender, _locationid, _vinevariety);
@@ -159,9 +188,8 @@ contract VineToWine {
     }
     
     //below function is to update the status of vine variety is changed
-    function updateVineVariety(string memory _locationid, string memory _vinevariety) public {
+    function updateVineVariety(string memory _locationid, string memory _vinevariety) public checkFarmer() {
         
-        require(addressRoleMapping[msg.sender].entityrole == role.farmer, "the entity is not a farmer");
         uint curr_timestamp = now;
         
         for (uint i = 0; i < vineyardmap[msg.sender].length; i++){
@@ -183,9 +211,8 @@ contract VineToWine {
     }
 
     //below function is to update the status of vineyard when the crop is picked
-    function updateVineyardPicking(string memory _locationid) public {
+    function updateVineyardPicking(string memory _locationid) public checkFarmer(){
         
-        require(addressRoleMapping[msg.sender].entityrole == role.farmer, "the entity is not a farmer");
         uint curr_timestamp = now;
         
         for (uint i = 0; i < vineyardmap[msg.sender].length; i++){
@@ -206,9 +233,8 @@ contract VineToWine {
     }
           
     //below function is triggeres by manufacturer to receive the vine batch
-    function receiveVineBatch(string memory _batch_num, address _farm_address) public{
+    function receiveVineBatch(string memory _batch_num, address _farm_address) public checkProducer() {
         
-        require(addressRoleMapping[msg.sender].entityrole == role.producer, "the entity is not a producer");
         producer memory p = producer(_batch_num,_farm_address,now,0,0,0,0,0,"");
         producermap[msg.sender].push(p);
         emit vineBatchReceived(msg.sender, p);
@@ -216,7 +242,7 @@ contract VineToWine {
     }
     
     // below function updates the destemming timestamp
-    function updateDestemming(string memory _batch_num) public {
+    function updateDestemming(string memory _batch_num) public checkProducer() {
         
         for(uint i = 0; i < producermap[msg.sender].length; i++){
             
@@ -228,7 +254,7 @@ contract VineToWine {
     }
     
     // below function updates the crushing timestamp
-    function updateCrushing(string memory _batch_num) public {
+    function updateCrushing(string memory _batch_num) public checkProducer() {
         
         for(uint i = 0; i < producermap[msg.sender].length; i++){
             
@@ -240,7 +266,7 @@ contract VineToWine {
     }
     
     // below function updates the crushing timestamp
-    function updateChilling(string memory _batch_num) public {
+    function updateChilling(string memory _batch_num) public checkProducer() {
         
         for(uint i = 0; i < producermap[msg.sender].length; i++){
             
@@ -252,7 +278,7 @@ contract VineToWine {
     }
     
     // below function updates the pressing timestamp
-    function updatePressing(string memory _batch_num) public {
+    function updatePressing(string memory _batch_num) public checkProducer() {
         
         for(uint i = 0; i < producermap[msg.sender].length; i++){
             
@@ -264,7 +290,7 @@ contract VineToWine {
     }
     
     // below function updates the barell timestamp
-    function updateBarrell(string memory _batch_num) public {
+    function updateBarrell(string memory _batch_num) public checkProducer() {
         
         string memory temp_barell_batch_number = "";
         for(uint i = 0; i < producermap[msg.sender].length; i++){
@@ -283,7 +309,7 @@ contract VineToWine {
     }
     
     // below function updates the timestamp when packer receives the barrel 
-    function receiveBarrell(string memory _barrel_batch_number, address _producer_address) public {
+    function receiveBarrell(string memory _barrel_batch_number, address _producer_address) public checkPacker() {
         
         packer memory p = packer(_barrel_batch_number, _producer_address, now, 0);
         packermap[msg.sender].push(p);
@@ -293,7 +319,7 @@ contract VineToWine {
     
     // this function updates the bottle id when the bottle is filled from the barrell. This will update the 
     // bottle id along with the barell id used for bottling.
-    function updateBottleId(string memory _bottle_id, string memory _barrel_batch_number) public{
+    function updateBottleId(string memory _bottle_id, string memory _barrel_batch_number) public checkPacker() {
         
         packer memory p = packer(_barrel_batch_number, msg.sender ,0,0);
         for(uint i = 0; i < packermap[msg.sender].length; i++) {
@@ -310,10 +336,10 @@ contract VineToWine {
               }
         }
         
-        emit bottledEvent(_bottle_id, p);
+        emit bottledEvent(msg.sender, _bottle_id, p);
     }
     
-    // this function stores any change in the ownership of the bottle after the packer has bottled the wine
+    // this function stores any change in the ownership of the bottle once the packer handles it to distributor
     function changeOwner(string memory _bottle_id) public {
         require(addressRoleMapping[msg.sender].entityrole == role.farmer ||
                 addressRoleMapping[msg.sender].entityrole == role.producer ||
@@ -359,10 +385,13 @@ contract VineToWine {
         
         bottleHistory memory b = bottleHistory(_bottle_id, v, prod, p, bottleownermap[_bottle_id]);
         
-        emit bottle_history(b);
+        emit bottle_history(msg.sender, b);
     }
     
     
+    //*******************************************************************************************
+    // create an ERC721 token to associate with bottle_id
+    // ******************************************************************************************
     
     // *****************  Non blockchain related processing starts ************************************
     // below is a function to convert uint to string to genrate the batch number
