@@ -2,6 +2,7 @@ pragma solidity 0.6.12;
 
 pragma experimental ABIEncoderV2;
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/IERC20.sol";
+import "NFT.sol";
 
 // address details for testing, each will have 100 tokens transfered (100000000000000000000)
 // farmer - 0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2
@@ -13,6 +14,9 @@ import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contr
 // contract deployer - 0x03C6FcED478cBbC9a4FAB34eF9f40767739D1Ff7
 
 contract VineToWine {
+    
+    
+    WineNFT wnft;
     
     //  ************   entity registration block starts ***************************************
     enum role{farmer, producer, packer, distributor, retailer, consumer}
@@ -100,6 +104,7 @@ contract VineToWine {
     event barrellDetails(address producer_address, string barrell_batch_number);
     event barrellReceived(address packeraddress, string barrell_batch_number);
     event bottledEvent(address packeraddress, string bottleId, packer packedbottle);
+    event ownerchange(address newowner, string bottleId, uint256 nftId);
     event bottle_history(address user, bottleHistory bottle_history_details);
 
     //*******************************************************************
@@ -347,7 +352,9 @@ contract VineToWine {
                 addressRoleMapping[msg.sender].entityrole == role.distributor ||
                 addressRoleMapping[msg.sender].entityrole == role.retailer ||
                 addressRoleMapping[msg.sender].entityrole == role.consumer, "the adress is not registered");
+        uint256 itemId = wnft.awardItem(msg.sender, _bottle_id);    
         bottleownermap[_bottle_id].push(msg.sender);
+        emit ownerchange(msg.sender, _bottle_id, itemId);
     }
     
     // this function gives history of the bottle_id
