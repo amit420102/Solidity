@@ -6,17 +6,38 @@ import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contr
 contract WineNFT is ERC721 {
 
     uint256 _tokenIds;
+    
+    struct tokendetails{
+        string URI;
+        uint256 tokenid;
+        bool URIadded;
+    }
+    
+    mapping (string => tokendetails) uriTokeIdMapping;
+    
     constructor() public ERC721("BottleId", "BID") {}
 
-    function awardItem(address player, string memory tokenURI) public returns (uint256)
+    function bottleNFT(address buyer, string memory tokenURI) public
     {
-        _tokenIds++;
-
-        uint256 newItemId = _tokenIds;
         
-        _mint(player, newItemId);
+        tokendetails memory td = tokendetails("", 0, false);
+        
+        if(!uriTokeIdMapping[tokenURI].URIadded) {
+        
+        _tokenIds++;
+        uint256 newItemId = _tokenIds;
+        _mint(msg.sender, newItemId);
         _setTokenURI(newItemId, tokenURI);
-
-        return newItemId;
+        td = tokendetails(tokenURI, newItemId, true);
+        uriTokeIdMapping[tokenURI] = td;
+            
+        }
+        
+        else{
+            
+            uint256 temptokenid = uriTokeIdMapping[tokenURI].tokenid;
+            _transfer(msg.sender, buyer, temptokenid);
+            
+        }
     }
 }
