@@ -2,7 +2,7 @@ pragma solidity 0.6.12;
 
 pragma experimental ABIEncoderV2;
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/IERC20.sol";
-import "NFT.sol";
+
 
 // address details for testing, each will have 100 tokens transfered (100000000000000000000)
 // farmer - 0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2
@@ -16,8 +16,6 @@ import "NFT.sol";
 contract VineToWine {
     
     
-    WineNFT wnft;
-    mapping(uint256 => address) tokenIdAddressMapping;
     
     //  ************   entity registration block starts ***************************************
     enum role{farmer, producer, packer, distributor, retailer, consumer}
@@ -105,7 +103,7 @@ contract VineToWine {
     event barrellDetails(address producer_address, string barrell_batch_number);
     event barrellReceived(address packeraddress, string barrell_batch_number);
     event bottledEvent(address packeraddress, string bottleId, packer packedbottle);
-    event ownerchange(address newowner, string bottleId, uint256 nftId);
+    event ownerchange(address newowner, string bottleId);
     event bottle_history(address user, bottleHistory bottle_history_details);
 
     //*******************************************************************
@@ -145,6 +143,8 @@ contract VineToWine {
     //******* modifier block ends *******************************************************
     
     // below function registers an entity in the ecosystem as one of the roles
+    // one thing to note is that we need to provide approval to this contract from token.sol for each 
+    // address trying to register.
     function registerEntity(string memory _name, role _role) public payable {
         
         
@@ -354,13 +354,11 @@ contract VineToWine {
                 addressRoleMapping[msg.sender].entityrole == role.retailer ||
                 addressRoleMapping[msg.sender].entityrole == role.consumer, "the adress is not registered");
         
-        uint256 itemId = wnft.bottleNFT(msg.sender, _bottle_id);    
+
         
         bottleownermap[_bottle_id].push(msg.sender);
         
-        tokenIdAddressMapping[itemId] = msg.sender; //store the mapping of tokenid of NFT and current holder
-        
-        emit ownerchange(msg.sender, _bottle_id, itemId);
+        emit ownerchange(msg.sender, _bottle_id);
     }
     
     // this function gives history of the bottle_id
