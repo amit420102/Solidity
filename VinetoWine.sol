@@ -3,19 +3,7 @@ pragma solidity 0.6.12;
 pragma experimental ABIEncoderV2;
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/IERC20.sol";
 
-
-// address details for testing, each will have 100 tokens transfered (100000000000000000000)
-// farmer - 0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2
-// producer - 0x4B20993Bc481177ec7E8f571ceCaE8A9e22C02db
-// packer - 0x78731D3Ca6b7E34aC0F824c42a7cC18A495cabaB
-// distributor - 0x617F2E2fD72FD9D5503197092aC168c91465E7f2
-// retailer - 0x17F6AD8Ef982297579C203069C1DbfFE4348c372
-// consumer - 0x5c6B0f7Bf3E7ce046039Bd8FABdfD3f9F5021678
-// contract deployer - 0x03C6FcED478cBbC9a4FAB34eF9f40767739D1Ff7
-
 contract VineToWine {
-    
-    
     
     //  ************   entity registration block starts ***************************************
     enum role{farmer, producer, packer, distributor, retailer, consumer}
@@ -457,6 +445,5 @@ contract VineToWine {
        
      emit produreDetails(p);
     }
-    
-    
+  
 }
