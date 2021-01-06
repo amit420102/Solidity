@@ -17,6 +17,7 @@ contract VineToWine {
     
     
     WineNFT wnft;
+    mapping(uint256 => address) tokenIdAddressMapping;
     
     //  ************   entity registration block starts ***************************************
     enum role{farmer, producer, packer, distributor, retailer, consumer}
@@ -352,8 +353,13 @@ contract VineToWine {
                 addressRoleMapping[msg.sender].entityrole == role.distributor ||
                 addressRoleMapping[msg.sender].entityrole == role.retailer ||
                 addressRoleMapping[msg.sender].entityrole == role.consumer, "the adress is not registered");
-        uint256 itemId = wnft.awardItem(msg.sender, _bottle_id);    
+        
+        uint256 itemId = wnft.bottleNFT(msg.sender, _bottle_id);    
+        
         bottleownermap[_bottle_id].push(msg.sender);
+        
+        tokenIdAddressMapping[itemId] = msg.sender; //store the mapping of tokenid of NFT and current holder
+        
         emit ownerchange(msg.sender, _bottle_id, itemId);
     }
     
