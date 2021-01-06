@@ -66,4 +66,5 @@ This function returns the entire journey of the bottle by calling function getBo
 
 # Tokenomics of the eco system:
 Smart contract Token.sol will create a fixed amount of token to be used in the eco system. Any entity invovled in the eco system can use ICO.sol to by the tokens needed in teh eco system. For simplicity, i have kept it as 1 ETH equals to 100 V2W tokens. Once the entity has bought the tokens they can execute the VineToWine.sol contract to start traceability of the entire wine supply chain management.
-Staking by the entities ensure that all the entities have stake in the system and can create trust in a trustless environment. In real world the stake can be higher to ensure there is heavy monetary penalty for any faul play. 
+Staking by the entities ensure that all the entities have stake in the system and can create trust in a trustless environment. In real world the stake can be higher to ensure there is heavy monetary penalty for any foul play. 
+Also, I have introduced basic NFT token for each consumer who owns a bottle of wine. Once a consumer receives the bottle, they will received unqie URI for each bottle which they can update on the UI to get the NFT assinged to the address. This NFT can be used as badge or brand loyalty and can be encahsed for any future discounts.
