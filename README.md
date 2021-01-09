@@ -1,13 +1,15 @@
 # VineToWine: 
 This project is about creating a traceability of wine being produced by a company and storing it on etherum blockchain. This smart contract will create a traceability for a wine bottle for the Vineyard from where the grapes came to the winery where the grape was processed. All the processes that were conducted while creating the wine to the packing and distribution of the wine bottle will be traced. This smart contract will also track change in ownership of the bottle.
 
-# There are 3 modules:
+# There are 4 modules:
 ## Token.sol
 This module contains details to generate a fixed amount of token fro the entire eco system.
 ## ICO.sol
 This module contains an interface for entities in the eco syatem to buy the tokens, where 1 eth will buy the user 100 tokens.
 ## VineToWine.sol
 This is the main contract where all the traceability is handled for the wine. More details about the entire contract can be found below.
+## NFT.sol
+This module is used to create NFT for each bittle of wine. The users can register on the website to get the URI information for the given bottle and use that bootle URI to retrieve NFT for the given bottle. A user can collect NFTs to get offers from the companies on the wine tasting events or discount offers on the bottle of wine.
 
 # Entities invovled in the eco system:
 There are large number of entities invovled in a wine production and delivery supply chain. Any entity which wants to participate in the eco system will need to stake a fixed amount of VineToWine token in roder to register on the platform. This activity calls function registerEntity() in the backend. This function needs entity name and its role in the eco system. Below are various roles in the eco system.
@@ -67,4 +69,4 @@ This function returns the entire journey of the bottle by calling function getBo
 # Tokenomics of the eco system:
 Smart contract Token.sol will create a fixed amount of token to be used in the eco system. Any entity invovled in the eco system can use ICO.sol to by the tokens needed in teh eco system. For simplicity, i have kept it as 1 ETH equals to 100 V2W tokens. Once the entity has bought the tokens they can execute the VineToWine.sol contract to start traceability of the entire wine supply chain management.
 Staking by the entities ensure that all the entities have stake in the system and can create trust in a trustless environment. In real world the stake can be higher to ensure there is heavy monetary penalty for any foul play. 
-Also, I have introduced basic NFT token for each consumer who owns a bottle of wine. Once a consumer receives the bottle, they will received unqie URI for each bottle which they can update on the UI to get the NFT assinged to the address. This NFT can be used as badge or brand loyalty and can be encahsed for any future discounts.
+Also, I have introduced basic NFT token for each consumer who owns a bottle of wine. Once a consumer receives the bottle, they will received unqie URI for each bottle which they can update on the UI to get the NFT assinged to the address. This NFT can be used as badge or brand loyalty and can be encashed for any future discounts or events.
