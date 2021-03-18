@@ -11,7 +11,7 @@ contract NewToken is ERC20 {
         
         owner = msg.sender;
         // _setupDecimals(1);
-        _mint(msg.sender, count * 10 ** 18);
+        _mint(msg.sender, count);
         
     }
 }
