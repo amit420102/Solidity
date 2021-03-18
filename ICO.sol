@@ -22,7 +22,7 @@ contract V2WICO {
     
     function buyTokens() public payable {
         require(msg.value >= 1 ether,"not enough ether sent");
-        uint256 count = oneEthToTokenRatio * msg.value;
+        uint256 count = (oneEthToTokenRatio * msg.value) / (10 ** 18);
         
         require(token.balanceOf(owner) > count, "contract does not have enough tokens");
         token.transferFrom(owner,msg.sender,count);    
